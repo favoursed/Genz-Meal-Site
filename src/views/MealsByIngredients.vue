@@ -1,9 +1,12 @@
 <template>
-  <div class="p-8 pb-0">
-    <h1 class="text-4xl font-bold mb-4 text-blue-500">Meals for {{ ingredient.strIngredient }}</h1>
-  </div>
+  <div class="max-w-[1200px] mx-auto pb-16">
+    <div class="p-8 pb-6">
+      <p class="uppercase tracking-[0.3em] text-[0.7rem] font-bold text-[#a3b18a] mb-2">Ingredient Focus</p>
+      <h1 class="text-4xl sm:text-5xl font-anton text-[#01472e] tracking-tight uppercase">Meals with {{ ingredient?.strIngredient || route.params.ingredient }}</h1>
+    </div>
 
-  <Meals :meals="meals" />
+    <Meals :meals="meals" />
+  </div>
 </template>
 
 <script setup>

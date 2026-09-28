@@ -1,21 +1,24 @@
 <template>
-  <div class="p-8 pb-0">
-    <h1 class="text-4xl font-bold mb-4 text-blue-500">Meals by Letter</h1>
-  </div>
-  <div class="flex flex-wrap justify-center gap-3 px-8 mb-6">
-    <router-link
-      :to="{ name: 'byLetter', params: { letter } }"
-      v-for="letter of letters"
-      :key="letter"
-      class="w-2 h-2 flex items-center justify-center hover:text-blue-500 hover:scale-150 transition-all"
-    >
-      {{ letter }}
-    </router-link>
-  </div>
+  <div class="max-w-[1200px] mx-auto pb-16">
+    <div class="p-8 pb-4">
+      <p class="uppercase tracking-[0.3em] text-[0.7rem] font-bold text-[#a3b18a] mb-2">Alphabetical Index</p>
+      <h1 class="text-4xl sm:text-5xl font-anton text-[#01472e] tracking-tight uppercase mb-6">Meals by Letter</h1>
+      <div class="flex flex-wrap justify-center gap-2 sm:gap-3 py-2">
+        <router-link
+          :to="{ name: 'byLetter', params: { letter } }"
+          v-for="letter of letters"
+          :key="letter"
+          class="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-anton text-base text-[#01472e] border border-[#01472e]/15 bg-white hover:bg-[#01472e] hover:text-[#fefae0] hover:scale-110 active:scale-95 transition-all shadow-sm"
+          active-class="!bg-[#01472e] !text-[#fefae0] !border-[#01472e]"
+        >
+          {{ letter }}
+        </router-link>
+      </div>
+    </div>
 
-  <Meals :meals="meals" />
+    <Meals :meals="meals" />
+  </div>
 </template>
- 
 
 <script setup>
 import Meals from "../components/Meals.vue";

@@ -1,18 +1,22 @@
 <template>
-  <div class="p-8 pb-0">
-    <h1 class="text-4xl font-bold mb-4 text-blue-500">Search Meals by Name</h1>
-  </div>
-  <div class="px-8 pb-3">
-    <input
-      type="text"
-      v-model="keyword"
-      class="rounded border-2 bg-white border-gray-200 focus:ring-blue-500 focus:border-blue-500 w-full"
-      placeholder="Search for Meals"
-      @change="searchMeals"
-    />
-  </div>
+  <div class="max-w-[1200px] mx-auto pb-16">
+    <div class="p-8 pb-4">
+      <p class="uppercase tracking-[0.3em] text-[0.7rem] font-bold text-[#a3b18a] mb-2">Culinary Archive</p>
+      <h1 class="text-4xl sm:text-5xl font-anton text-[#01472e] tracking-tight uppercase mb-6">Search Meals by Name</h1>
+      <div class="pb-4">
+        <input
+          type="text"
+          v-model="keyword"
+          class="rounded-full border-2 bg-white border-[#ccd5ae] focus:ring-2 focus:ring-[#01472e] focus:border-[#01472e] text-[#01472e] placeholder-[#01472e]/40 px-6 py-3.5 w-full shadow-sm outline-none transition-all font-medium"
+          placeholder="Type recipe or meal name..."
+          @change="searchMeals"
+          @input="searchMeals"
+        />
+      </div>
+    </div>
 
-  <Meals :meals="meals" />
+    <Meals :meals="meals" />
+  </div>
 </template>
 
 <script setup>
