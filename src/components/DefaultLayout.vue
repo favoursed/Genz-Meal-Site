@@ -5,6 +5,7 @@
     <main class="flex-1">
       <router-view />
     </main>
+    <VideoModal />
     <footer class="bg-[#01472e] text-[#ccd5ae] pt-20 sm:pt-28 pb-12 px-6 sm:px-12 rounded-t-[3.5rem] sm:rounded-t-[5rem] mt-auto relative z-30">
       <div class="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-10 mb-16">
         <div class="md:col-span-6">
@@ -56,4 +57,5 @@
 
 <script setup>
 import Navbar from "../components/Navbar.vue";
+import VideoModal from "../components/VideoModal.vue";
 </script>
