@@ -87,37 +87,43 @@
         </div>
       </div>
 
-      <!-- Hover Prompt Pill (shows before preview starts if video exists) -->
+      <!-- Hover / Mobile Touch Prompt Pill -->
       <div
         v-if="meal.strYoutube && !showPreview"
-        class="absolute bottom-3 left-3 z-10 pointer-events-none opacity-0 group-hover/thumb:opacity-100 transition-opacity duration-200"
+        class="absolute bottom-2.5 left-2.5 sm:bottom-3 sm:left-3 z-10 transition-opacity duration-200"
       >
-        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#01472e]/85 backdrop-blur-md text-[#fefae0] border border-[#ccd5ae]/30 shadow-sm">
-          <svg class="w-2.5 h-2.5 fill-current text-red-400" viewBox="0 0 24 24">
+        <button
+          type="button"
+          @click.stop.prevent="toggleMobilePreview"
+          class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-[#01472e]/85 backdrop-blur-md text-[#fefae0] border border-[#ccd5ae]/30 shadow-sm opacity-90 sm:opacity-0 sm:group-hover/thumb:opacity-100 hover:scale-105 active:scale-95 transition-all cursor-pointer"
+          title="Play 10-second video preview"
+        >
+          <svg class="w-2.5 h-2.5 fill-current text-red-400 shrink-0" viewBox="0 0 24 24">
             <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
           </svg>
-          Hover for 10s Clip
-        </span>
+          <span class="sm:hidden">10s Clip ▶</span>
+          <span class="hidden sm:inline">Hover for 10s Clip</span>
+        </button>
       </div>
     </div>
 
     <!-- Recipe Content & Action Footer -->
-    <div class="p-6 flex flex-col flex-1">
-      <h3 class="font-bold text-xl text-[#01472e] mb-2 leading-snug">{{ meal.strMeal }}</h3>
-      <p class="mb-5 text-[#01472e]/75 text-sm leading-relaxed flex-1">
-        {{ $filters.truncateWords(meal.strInstructions, 20) }}
+    <div class="p-4 sm:p-6 flex flex-col flex-1">
+      <h3 class="font-bold text-lg sm:text-xl text-[#01472e] mb-2 leading-snug line-clamp-1">{{ meal.strMeal }}</h3>
+      <p class="mb-4 sm:mb-5 text-[#01472e]/75 text-xs sm:text-sm leading-relaxed flex-1">
+        {{ $filters.truncateWords(meal.strInstructions, 18) }}
       </p>
-      <div class="flex items-center justify-between gap-3 pt-3 border-t border-[#01472e]/10">
+      <div class="flex items-center justify-between gap-2 pt-3 border-t border-[#01472e]/10">
         <YouTubeButton
           v-if="meal.strYoutube"
           :href="meal.strYoutube"
           :title="meal.strMeal"
           :mealId="meal.idMeal"
         />
-        <span v-else class="text-[11px] uppercase tracking-wider text-[#01472e]/40 font-bold">No video</span>
+        <span v-else class="text-[10px] sm:text-[11px] uppercase tracking-wider text-[#01472e]/40 font-bold">No video</span>
         <router-link
           :to="{ name: 'mealDetails', params: { id: meal.idMeal } }"
-          class="px-4 py-2 rounded-full border border-[#01472e]/30 text-[#01472e] hover:bg-[#01472e] hover:text-[#fefae0] text-xs font-bold uppercase tracking-[0.15em] transition-colors"
+          class="px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-[#01472e]/30 text-[#01472e] hover:bg-[#01472e] hover:text-[#fefae0] text-[10px] sm:text-xs font-bold uppercase tracking-[0.1em] sm:tracking-[0.15em] transition-colors whitespace-nowrap shrink-0 text-center"
         >
           View Recipe
         </router-link>
@@ -191,6 +197,36 @@ function handleToggleSound() {
   }
 }
 
+function startPreview() {
+  clearTimers();
+  showPreview.value = true;
+  previewProgress.value = 0;
+
+  const startTime = Date.now();
+  const duration = 10000; // 10 seconds
+
+  progressInterval = setInterval(() => {
+    const elapsed = Date.now() - startTime;
+    previewProgress.value = Math.min(100, (elapsed / duration) * 100);
+
+    if (elapsed >= duration) {
+      clearInterval(progressInterval);
+    }
+  }, 100);
+
+  endTimeout = setTimeout(() => {
+    stopPreview();
+  }, duration);
+}
+
+function toggleMobilePreview() {
+  if (showPreview.value) {
+    stopPreview();
+  } else {
+    startPreview();
+  }
+}
+
 function handleMouseEnter() {
   if (!props.meal?.strYoutube) return;
 
@@ -200,25 +236,7 @@ function handleMouseEnter() {
   // 200ms hover intent delay to prevent triggering on fast mouse swipes
   hoverTimeout = setTimeout(() => {
     if (!isHovering.value) return;
-
-    showPreview.value = true;
-    previewProgress.value = 0;
-
-    const startTime = Date.now();
-    const duration = 10000; // 10 seconds
-
-    progressInterval = setInterval(() => {
-      const elapsed = Date.now() - startTime;
-      previewProgress.value = Math.min(100, (elapsed / duration) * 100);
-
-      if (elapsed >= duration) {
-        clearInterval(progressInterval);
-      }
-    }, 100);
-
-    endTimeout = setTimeout(() => {
-      stopPreview();
-    }, duration);
+    startPreview();
   }, 200);
 }
 
